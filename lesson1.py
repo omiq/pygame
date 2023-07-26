@@ -6,7 +6,7 @@ pygame.init()
 # Set up display
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Move the Sprite")
+pygame.display.set_caption("UFO Game (Move the Sprite with Cursor Keys)")
 
 # Load images
 background = pygame.image.load("background.png").convert_alpha()
