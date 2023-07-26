@@ -1,13 +1,15 @@
-import pygame
+
 import sys
 import os
 
-# Initialize Pygame
+# Initialize Pygame without the start message
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import pygame
 pygame.init()
 
 # Set up display
 WIDTH, HEIGHT = 800, 600 # Adjust the WIDTH and HEIGHT to your preferred screen size.
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE, pygame.DOUBLEBUF)
 
 # Window title
 pygame.display.set_caption("UFO Game (Move the Sprite with Cursor Keys)")
@@ -53,6 +55,14 @@ while running:
         # Closing the window doesn't shut off the game!
         if event.type == pygame.QUIT: # Check to see if we need to exit
             running = False           # If so, set our variable to False
+
+        if event.type == pygame.VIDEORESIZE:
+            # if the user resizes the window (drag the bottom right corner)
+            # get the new size from the event dict and reset the 
+            # window screen surface
+            print(f"Screen has been resized to: {event.dict['size']}")
+            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+
 
     # Get any currently depressed keys
     keys = pygame.key.get_pressed()
