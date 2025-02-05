@@ -1,6 +1,7 @@
 import os
 import random
-# Initialize Pygame without the start message
+
+# Suppress Pygame startup message
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 import pygame
@@ -28,10 +29,10 @@ def create_tile(right_line=True, bottom_line=True):
     return tile
 
 # Create all tile variations
-tile_default = create_tile(True, True)   # Both lines
-tile_no_right = create_tile(False, True)  # No right line
-tile_no_bottom = create_tile(True, False)  # No bottom line
-tile_open = create_tile(False, False)  # No lines
+tile_default = create_tile(True, True)     # Both walls
+tile_no_right = create_tile(False, True)   # No right wall
+tile_no_bottom = create_tile(True, False)  # No bottom wall
+tile_open = create_tile(False, False)      # No walls
 
 # Grid to store tile types
 tile_grid = [[tile_default for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
@@ -76,11 +77,17 @@ while running:
         # Choose a random unvisited neighbor
         next_x, next_y, direction = random.choice(neighbors)
 
-        # Update the tile based on movement
-        if direction == "E":
-            tile_grid[current_y][current_x] = tile_no_right  # Remove right line
-        elif direction == "S":
-            tile_grid[current_y][current_x] = tile_no_bottom  # Remove bottom line
+        # Update the current tile based on movement
+        if direction == "E":  # Moving right
+            if tile_grid[current_y][current_x] == tile_no_bottom:
+                tile_grid[current_y][current_x] = tile_open  # Already removed bottom, now remove right
+            else:
+                tile_grid[current_y][current_x] = tile_no_right  # Remove right only
+        elif direction == "S":  # Moving down
+            if tile_grid[current_y][current_x] == tile_no_right:
+                tile_grid[current_y][current_x] = tile_open  # Already removed right, now remove bottom
+            else:
+                tile_grid[current_y][current_x] = tile_no_bottom  # Remove bottom only
 
         # Mark as visited and continue
         visited.add((next_x, next_y))
