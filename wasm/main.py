@@ -118,35 +118,28 @@ async def generate_maze():
 
 # Main game loop
 async def main():
-    running = True
-    while running:
+    while True:  # Infinite loop to allow maze regeneration
         # Generate a new maze
         tile_grid, tile_walls = await generate_maze()
 
         # Show the message after the maze is complete
-        message = "Press ENTER to generate a new maze or ESC to quit."
+        message = "Press ENTER to generate a new maze."
         text_surface = font.render(message, True, (255, 255, 255))
         screen.blit(text_surface, (20, SCREEN_HEIGHT - 40))
         pygame.display.flip()
 
-        # Wait for user input
+        # Wait for user to press ENTER to regenerate
         waiting = True
         while waiting:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                    waiting = False
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:  # Press ENTER to restart
-                        waiting = False
-                    elif event.key == pygame.K_ESCAPE:  # Press ESC to quit
-                        running = False
-                        waiting = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:  # Click to exit
-                    running = False
-                    waiting = False
+                        waiting = False  # Exit waiting loop, regenerate the maze
+                elif event.type == pygame.QUIT:  # Close tab to exit in browser
+                    return  # Exit the function, stopping the game
+
             pygame.display.update()
-            await asyncio.sleep(0)
+            await asyncio.sleep(0)  # Yield control
 
 # Ensure Pygbag works correctly
 if __name__ == "__main__":
